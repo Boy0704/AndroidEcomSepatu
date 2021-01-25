@@ -14,6 +14,10 @@ import android.widget.Button;
 
 import com.jualkoding.ecomsepatu.R;
 
+/*
+File ini untuk fragment cart
+ */
+
 public class CartFragment extends Fragment {
 
     private Button btnCheckout;
