@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/categoriFragment"
+    android:id="@+id/nav_categori">
+
+
+    <fragment
+        android:id="@+id/categoriFragment"
+        android:name="com.jualkoding.ecomsepatu.ui.categories.CategoriAllFragment"
+        android:label="Categori"
+        tools:layout="@layout/fragment_categori_all">
+        <action
+            android:id="@+id/action_categoriFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.jualkoding.ecomsepatu.ui.detail.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail"/>
+
+</navigation>

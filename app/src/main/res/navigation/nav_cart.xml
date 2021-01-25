@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/cartFragment"
+    android:id="@+id/nav_cart">
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.jualkoding.ecomsepatu.ui.cart.CartFragment"
+        android:label="Cart"
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_shippingFragment"
+            app:destination="@id/shippingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shippingFragment"
+        android:name="com.jualkoding.ecomsepatu.ui.cart.ShippingFragment"
+        android:label="Shipping"
+        tools:layout="@layout/fragment_shipping">
+        <action
+            android:id="@+id/action_shippingFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.jualkoding.ecomsepatu.ui.cart.PaymentFragment"
+        android:label="Payment"
+        tools:layout="@layout/fragment_payment"/>
+
+</navigation>
