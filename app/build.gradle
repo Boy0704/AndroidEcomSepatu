@@ -32,6 +32,8 @@ android {
         sandbox {
             buildConfigField "String", "BASE_URL", "\"http://demo.ayogolive.com/midtrans_api/index.php/\""
             buildConfigField "String", "CLIENT_KEY", "\"SB-Mid-client-xRx0XNOUGUubUEyK\""
+            buildConfigField "String", "RAJA_URL", "\"https://api.rajaongkir.com/starter/\""
+
         }
 
 //        production {

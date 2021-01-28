@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jualkoding.ecomsepatu.R;
 import com.jualkoding.ecomsepatu.BuildConfig;
 import com.jualkoding.ecomsepatu.model.CustomerModel;
+import com.jualkoding.ecomsepatu.model.cost.Rajaongkir;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
 import com.midtrans.sdk.corekit.core.PaymentMethod;
@@ -26,6 +28,7 @@ import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 public class PaymentFragment extends Fragment implements TransactionFinishedCallback {
 
     private Button btnPayment;
+    private TextView tvAlamat;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -44,11 +47,19 @@ public class PaymentFragment extends Fragment implements TransactionFinishedCall
         super.onViewCreated(view, savedInstanceState);
 
         btnPayment = view.findViewById(R.id.btn_payment);
+        View paymentDetail = view.findViewById(R.id.includePaymentDetail);
+
+        tvAlamat = paymentDetail.findViewById(R.id.tv_alamat);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Rajaongkir rajaongkir = getArguments().getParcelable("rajaongkir");
+        if (rajaongkir != null) {
+            tvAlamat.setText(rajaongkir.getDestinationDetails().getCityName());
+        }
 
         initMidtransSDK();
         btnPayment.setOnClickListener(new View.OnClickListener() {
