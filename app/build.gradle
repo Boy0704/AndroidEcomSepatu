@@ -32,7 +32,10 @@ android {
         sandbox {
             buildConfigField "String", "BASE_URL", "\"http://demo.ayogolive.com/midtrans_api/index.php/\""
             buildConfigField "String", "CLIENT_KEY", "\"SB-Mid-client-xRx0XNOUGUubUEyK\""
+            buildConfigField "String", "SHOP_URL", "\"https://api.bagicode.com/Ecom/\""
             buildConfigField "String", "RAJA_URL", "\"https://api.rajaongkir.com/starter/\""
+            buildConfigField "String", "RAJA_KEY", "\"8daca5cc68fa60eb24427504a17a49d0\""
+            buildConfigField "String", "RAJA_ANDROID", "\"Android\""
 
         }
 
@@ -58,5 +61,6 @@ dependencies {
     implementation 'com.midtrans:uikit:1.23.1-SANDBOX'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
 
 }

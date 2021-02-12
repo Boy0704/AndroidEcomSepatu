@@ -77,8 +77,8 @@ public class ShippingFragment extends Fragment {
 
         ApiService apiService =  retrofit.create(ApiService.class);
         Call<ItemCost> call = apiService.getCost(
-                "8daca5cc68fa60eb24427504a17a49d0",
-                "Android",
+                BuildConfig.RAJA_KEY,
+                BuildConfig.RAJA_ANDROID,
                 origin,
                 dest,
                 weight,

@@ -1,5 +1,6 @@
 package com.jualkoding.ecomsepatu.ui.home;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,16 +16,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.jualkoding.ecomsepatu.BuildConfig;
 import com.jualkoding.ecomsepatu.R;
+import com.jualkoding.ecomsepatu.api.ApiService;
 import com.jualkoding.ecomsepatu.model.HomeModel;
+import com.jualkoding.ecomsepatu.model.home.Casual;
+import com.jualkoding.ecomsepatu.model.home.ItemProduk;
+import com.jualkoding.ecomsepatu.model.home.Sport;
 import com.jualkoding.ecomsepatu.ui.categories.CategoriesActivity;
+import com.jualkoding.ecomsepatu.ui.home.adapter.CasualAdapter;
+import com.jualkoding.ecomsepatu.ui.home.adapter.SportAdapter;
+import com.jualkoding.ecomsepatu.utils.Const;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class HomeFragment extends Fragment implements HomeAdapter.ItemAdapterCallback {
+
+public class HomeFragment extends Fragment implements CasualAdapter.ItemAdapterCallback, SportAdapter.ItemAdapterCallback {
 
     private RecyclerView rvSport;
     private RecyclerView rvCasual;
@@ -33,6 +48,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.ItemAdapterCal
     private TextView tvActionLayoutSport, tvActionLayoutCasual, tvHeaderLayoutCasual;
     private TextView tvShopNow;
     private ImageView ivShowNow;
+    private ProgressDialog progressDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,23 +85,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.ItemAdapterCal
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        listData = new ArrayList<>();
-        listData.add(new HomeModel(1,"Boy","New","30%","url"));
-        listData.add(new HomeModel(2,"Boy","New","30%","url"));
-        listData.add(new HomeModel(3,"Boy","New","30%","url"));
-        listData.add(new HomeModel(4,"Boy","New","30%","url"));
-        listData.add(new HomeModel(5,"Boy","New","30%","url"));
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
-        HomeAdapter homeAdapter = new HomeAdapter(listData,this);
-        rvSport.setLayoutManager(linearLayoutManager);
-        rvSport.setAdapter(homeAdapter);
-
-        tvHeaderLayoutCasual.setText("Casual Shoes");
-        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
-        HomeAdapter homeAdapter1 = new HomeAdapter(listData,this);
-        rvCasual.setLayoutManager(linearLayoutManager1);
-        rvCasual.setAdapter(homeAdapter1);
 
         ivShowNow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,10 +95,72 @@ public class HomeFragment extends Fragment implements HomeAdapter.ItemAdapterCal
             }
         });
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Silahkan tunggu..");
+        progressDialog.show();
+
+        getData();
+
     }
 
     @Override
     public void onClick(View view) {
         Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_detailFragment);
     }
+
+    private void getData() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.SHOP_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<ItemProduk> call = apiService.getProduk(
+                new Const().CODE_APPS
+        );
+
+        call.enqueue(new Callback<ItemProduk>() {
+            @Override
+            public void onResponse(Call<ItemProduk> call, Response<ItemProduk> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful()){
+
+                    String statusCode = response.body().getCodeStatus();
+                    if (statusCode.equalsIgnoreCase("200")) {
+                        setDataSport(response.body().getData().getSport());
+                        setDataCasual(response.body().getData().getCasual());
+                    }
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ItemProduk> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(),"Error "+t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setDataCasual(List<Casual> casual) {
+
+        tvHeaderLayoutCasual.setText("Casual Shoes");
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
+        CasualAdapter casualAdapter = new CasualAdapter(casual,this);
+        rvCasual.setLayoutManager(linearLayoutManager1);
+        rvCasual.setAdapter(casualAdapter);
+
+    }
+
+    private void setDataSport(List<Sport> sport) {
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
+        SportAdapter sportAdapter = new SportAdapter(sport,this);
+        rvSport.setLayoutManager(linearLayoutManager);
+        rvSport.setAdapter(sportAdapter);
+
+    }
+
 }
