@@ -44,7 +44,7 @@ public class CasualAdapter extends RecyclerView.Adapter<CasualAdapter.ViewHolder
         holder.ivPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemAdapterCallback.onClick(v);
+                itemAdapterCallback.onClickCasual(v, rvData.get(position));
             }
         });
     }
@@ -68,6 +68,6 @@ public class CasualAdapter extends RecyclerView.Adapter<CasualAdapter.ViewHolder
     }
 
     public interface ItemAdapterCallback{
-        void onClick(View view);
+        void onClickCasual(View view, Casual casual);
     }
 }

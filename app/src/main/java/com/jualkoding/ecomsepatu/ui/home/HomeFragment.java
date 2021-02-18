@@ -103,11 +103,6 @@ public class HomeFragment extends Fragment implements CasualAdapter.ItemAdapterC
 
     }
 
-    @Override
-    public void onClick(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_detailFragment);
-    }
-
     private void getData() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.SHOP_URL)
@@ -163,4 +158,21 @@ public class HomeFragment extends Fragment implements CasualAdapter.ItemAdapterC
 
     }
 
+    @Override
+    public void onClickSport(View view, Sport sport) {
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(new Const().INTENT_DETAIL, sport);
+        bundle.putString(new Const().INTENT_DETAIL_STATUS, new Const().SPORT);
+        Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_detailFragment, bundle);
+    }
+
+    @Override
+    public void onClickCasual(View view, Casual casual) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(new Const().INTENT_DETAIL, casual);
+        bundle.putString(new Const().INTENT_DETAIL_STATUS, new Const().CASUAL);
+        Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_detailFragment, bundle);
+
+    }
 }

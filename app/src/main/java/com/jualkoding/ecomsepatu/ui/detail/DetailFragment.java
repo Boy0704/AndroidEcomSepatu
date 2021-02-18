@@ -1,6 +1,7 @@
 package com.jualkoding.ecomsepatu.ui.detail;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,11 +16,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jualkoding.ecomsepatu.R;
 import com.jualkoding.ecomsepatu.model.ColorsModel;
 import com.jualkoding.ecomsepatu.model.SizeModel;
+import com.jualkoding.ecomsepatu.model.home.Casual;
+import com.jualkoding.ecomsepatu.model.home.Sport;
 import com.jualkoding.ecomsepatu.ui.cart.CartActivity;
+import com.jualkoding.ecomsepatu.utils.Const;
+import com.jualkoding.ecomsepatu.utils.Ekstention;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +40,11 @@ public class DetailFragment extends Fragment implements ColorsAdapter.ItemAdapte
     private RecyclerView rvSetSize;
     private List<SizeModel> sizeModelList;
     private Button btnAddCart;
+    private String dataStatus;
+    private Sport dataSport;
+    private Casual dataCasual;
+    private ImageView ivPoster;
+    private TextView tvJudul,tvDisc,tvHarga,tvHargaDisc;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -48,6 +61,13 @@ public class DetailFragment extends Fragment implements ColorsAdapter.ItemAdapte
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ivPoster = view.findViewById(R.id.imageView3);
+        tvJudul = view.findViewById(R.id.textView11);
+        tvDisc = view.findViewById(R.id.textView12);
+        tvHarga = view.findViewById(R.id.textView13);
+        tvHargaDisc = view.findViewById(R.id.textView14);
+
+
         rvSetColors = view.findViewById(R.id.rv_setcolor);
         rvSetSize = view.findViewById(R.id.rv_setsize);
         btnAddCart = view.findViewById(R.id.btn_add_cart);
@@ -57,6 +77,19 @@ public class DetailFragment extends Fragment implements ColorsAdapter.ItemAdapte
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        dataStatus = getArguments().getString(new Const().INTENT_DETAIL_STATUS);
+        if (dataStatus.equalsIgnoreCase(new Const().SPORT)) {
+            dataSport = getArguments().getParcelable(new Const().INTENT_DETAIL);
+            if (dataSport != null){
+                initView(dataSport);
+            }
+        } else {
+            dataCasual = getArguments().getParcelable(new Const().INTENT_DETAIL);
+            if (dataCasual != null) {
+                initView(dataCasual);
+            }
+        }
 
         colorsModelList = new ArrayList<>();
 
@@ -87,6 +120,24 @@ public class DetailFragment extends Fragment implements ColorsAdapter.ItemAdapte
                 startActivity(goCart);
             }
         });
+    }
+
+    private void initView(Sport dataSport) {
+        Glide.with(getContext()).load(dataSport.getPoster()).into(ivPoster);
+
+        tvJudul.setText(dataSport.getTitle());
+        tvDisc.setText(dataSport.getDisc());
+        tvHarga.setText(new Ekstention().convertPrice(dataSport.getPrice()));
+        tvHargaDisc.setText(new Ekstention().convertPrice(dataSport.getPriceReal()));
+    }
+
+    private void initView(Casual dataCasual){
+        Glide.with(getContext()).load(dataCasual.getPoster()).into(ivPoster);
+
+        tvJudul.setText(dataCasual.getTitle());
+        tvDisc.setText(dataCasual.getDisc());
+        tvHarga.setText(new Ekstention().convertPrice(dataCasual.getPrice()));
+        tvHargaDisc.setText(new Ekstention().convertPrice(dataCasual.getPriceReal()));
     }
 
     @Override
